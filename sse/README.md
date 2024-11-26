@@ -95,14 +95,21 @@ pytest tests/
 └── tests
 
 INDEXING:
-1. data indexing into pinecone occurs in index_data.py. I added a drop_and_recreate_index() for testing reasons. I use  parameters MAX_TIME_PER_ARTICLE, PERCENTAGE_OF_DATABASE_TO_INDEX. MAX_TIME_PER_ARTICLE hopefully temporary, used because indexing some specific articles was taking much longer than the others.
-2. embeddings are dynamically generated using opeanai API
-3. metadata is dynamically generated and indexed along with the embedding, to be used both for filters, and as diplay datawhen search results are sent to the frontend.
+1. Data Indexing: The script `index_data.py` handles the indexing process. For testing purposes, a function `drop_and_recreate_index()` has been included. The indexing process is controlled by parameters such as `MAX_TIME_PER_ARTICLE` and `PERCENTAGE_OF_DATABASE_TO_INDEX`. The `MAX_TIME_PER_ARTICLE` parameter, which is likely temporary, helps manage cases where some articles take significantly longer to index than others.
+
+2. Embeddings: Embeddings are generated dynamically using an external API.
+
+3. Metadata: Metadata is created dynamically alongside the embeddings and is indexed together with them. This metadata serves two purposes: it is used as a filter during searches and is displayed when search results are sent to the frontend.
 
 SEARCH:
-1. User insert search query, and select age group / or use default
-2. Search query is sent to http://127.0.0.1:8000/api/search
-3. query content is validated, and response is created: response = fetch_search_results_with_metadata(), passing also filters like type and age_group
-4. embedding for query is created: query_embedding = generate_embedding(), using opeanai API
-5. results are fetched using query_embeddings(), with approapriate filtes 
-6. filtered results are returned, using pinecone's entries metadata to display back to the frontend
+1. User Input: The user provides a search query and optionally selects an age group, or the default age group is applied.
+
+2. API Request: The query is sent to the backend search API.
+
+3. Validation and Response Creation: The query content is validated, and a response is prepared using the function `fetch_search_results_with_metadata()`. This step incorporates filters such as type and age group.
+
+4. Query Embedding: An embedding for the query is generated dynamically using the external API.
+
+5. Result Fetching: Results are retrieved using the query embedding and the specified filters.
+
+6. Returning Results: Filtered results, along with metadata from the indexed entries, are sent back to the frontend for display.
